@@ -97,3 +97,66 @@ perl 001.Loter_AncestryTractLength.pl  -V potato_chr_01.vcf  -R LOTER_chr01.out.
 perl 002.SummaryGenome_or_Chrs.TractLength.pl LOTER1.total.step1
 ```
 
+
+
+## calculate fd
+
+```shell
+zcat parse_431.vcf.gz |grep -E "#|chr01" >parse_chr01.vcf
+zcat parse_431.vcf.gz |grep -E "#|chr12" >parse_chr12.vcf
+
+python  ~/software/scripts/ABBABABAwindows.py -g parse_chr01.vcf  -f phased  -o chr01_output1  -P1 Tomato  -P2 Potato   -P3 ETB  -O Outgroup  --popsFile 431_sample_ID.txt  --minData 0.5 -w 100000 -m 50  -T 30
+python  ~/software/scripts/ABBABABAwindows.py -g parse_chr12.vcf  -f phased  -o chr12_output1  -P1 Tomato  -P2 Potato   -P3 ETB  -O Outgroup  --popsFile 431_sample_ID.txt  --minData 0.5 -w 100000 -m 50  -T 30
+```
+
+
+
+## calculate recombination rate
+
+```shell
+# step1
+#!/bin/bash
+~/miniconda3/bin/R --no-save <<EOF
+library(FastEPRR)
+#dir.create("chr${1}")
+FastEPRR_VCF_step1(vcfFilePath="./potato_chr_${1}.vcf",srcOutputFilePath="./chr${1}",winLength="100",winDXThreshold=30)
+EOF
+
+# for submit
+for i in {01..12}; do echo "qsub -q queue1,big CHB_step1.sh ${i}"; done
+
+# step2
+#!/bin/bash
+~/miniconda3/bin/R --no-save <<EOF
+library(FastEPRR)
+FastEPRR_VCF_step2(srcFolderPath="chr12_rr", jobNumber= 100,currJob=${1},DXOutputFolderPath="chr12_output")
+EOF
+
+# for submit
+#!/bin/bash
+for((i=1;i<101;i=i+1));
+do
+    qsub -q queue1,big CHB_step2.sh ${i}
+done
+
+# step3
+#!/bin/bash
+~/miniconda3/bin/R --no-save <<EOF
+library(FastEPRR)
+FastEPRR_VCF_step3(srcFolderPath="chr2_rr",DXFolderPath="chr2_output",finalOutputFolderPath="step3_outputData")
+EOF
+
+# for submit
+
+```
+
+
+
+
+
+```shell
+# extract the vcf from the specific region
+/public/software/env01/bin/bcftools filter  population.vcf.gz   --regions  chr:pos1-pos2 >~/specific_region.vcf
+bcftools query -f '%CHROM %POS %REF %ALT [ %GT]\n'  specific_region.vcf
+```
+
