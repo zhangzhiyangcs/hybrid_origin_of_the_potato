@@ -1,0 +1,17 @@
+#%Module1.0
+#####################################################################
+##
+## EDTA Modulefile
+## by Zhigui Bao
+## 12-01-2020
+##
+##
+
+# for Tcl script use only
+set     appname         miniprot
+set     version         1.9.4
+set     prefix          /work/home/zhangzhiyang/miniconda3/
+set     exec_prefix     ${prefix}/bin
+
+
+

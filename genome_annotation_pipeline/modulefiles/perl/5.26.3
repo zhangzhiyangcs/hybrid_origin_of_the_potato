@@ -1,0 +1,25 @@
+#%Module1.0
+##
+## modules modulefile
+## by Zhigui Bao
+## modulefiles/modules.  Generated from modules.in by configure.
+##
+proc ModulesHelp { } {
+                global version prefix
+                puts stderr "\tAdds perl to your environment variables."
+                puts stderr "\n\tThis adds $prefix/* to several of the"
+                puts stderr "\tenvironment variables."
+                puts stderr "\n\tVersion $version\n"
+}
+#module load gcc/6.4.0
+module-whatis   "perl/5.26.3"
+# for Tcl script use only
+set     appname         perl
+set     version         5.26.2
+set     prefix          /work/home/zhangzhiyang/software/${appname}
+set     exec_prefix     ${prefix}
+set     datarootdir     ${prefix}/share
+set     INSTALL_DIR     ${prefix}
+
+prepend-path            PATH    ${prefix}/bin
+setenv            PERL5LIB    ${prefix}/lib/site_perl/5.26.1/x86_64-linux-thread-multi:${prefix}/lib/site_perl/5.26.1:${prefix}/lib/5.26.1/x86_64-linux-thread-multi:${prefix}/lib/5.26.1

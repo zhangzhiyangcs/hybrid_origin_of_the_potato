@@ -1,0 +1,31 @@
+#%Module1.0#####################################################################
+##
+## maker modulefile
+##
+#module load MPICH/3.3.2
+module load mpi/mpich/3.3.2-gcc-7.3.1
+module load perl/5.26.3
+#module load RepeatMasker/4.1.0
+module load GeneMark-ES/4.3.8
+module load SNAP/20190604
+
+
+
+proc ModulesHelp { } {
+        global version prefix
+
+        puts stderr "\tmodules - loads the maker software"
+        puts stderr "\n\tThis adds $prefix/* to several of the"
+        puts stderr "\tenvironment variables."
+        puts stderr "\n\tVersion $version\n"
+}
+
+module-whatis	"loads the modules environment"
+
+# for Tcl script use only
+set	version		2.31.11
+set	prefix		/work/home/zhangzhiyang/miniconda3/envs/maker
+
+
+#setenv          MODULESHOME	$prefix
+prepend-path    PATH   		                $prefix/bin
