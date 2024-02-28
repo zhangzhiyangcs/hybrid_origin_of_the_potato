@@ -1,0 +1,16 @@
+#%Module1.0
+#####################################################################
+##
+## admixture Modulefile
+##
+#module load gcc/6.4.0
+# for Tcl script use only
+set     appname         SNAP
+set     version         SNAP
+set     prefix          /work/home/zhangzhiyang/software/${appname}/
+
+
+conflict $appname
+
+prepend-path    PATH        ${prefix}
+prepend-path    ZOE         ${prefix}/ZOE

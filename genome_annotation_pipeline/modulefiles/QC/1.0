@@ -1,0 +1,23 @@
+#%Module1.0
+#####################################################################
+##
+## QC Modulefile
+## by Zhigui Bao
+## 12-01-2020
+## fastp fastqc
+##
+
+# for Tcl script use only
+set     appname                     QC
+set     version                     1.0
+set     prefix                      /work/home/zhangzhiyang/miniconda3/envs/${appname}
+set     exec_prefix                 ${prefix}/bin
+set     JAVA_HOME                   ${prefix}
+set     JAVA_LD_LIBRARY_PATH        ${prefix}/jre/lib/amd64/server
+
+
+
+conflict $appname
+
+prepend-path    PATH        ${exec_prefix}
+prepend-path    LD_LIBRARY_PATH  ${prefix}/lib

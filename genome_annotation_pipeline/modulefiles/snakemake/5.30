@@ -1,0 +1,21 @@
+#%Module1.0
+#####################################################################
+##
+## EDTA Modulefile
+## by Zhigui Bao
+## 12-01-2020
+##
+##
+
+# for Tcl script use only
+set     appname         snakemake
+set     version         5.30
+set     prefix          /work/home/zhangzhiyang/miniconda3
+set     exec_prefix     ${prefix}/bin
+
+
+
+conflict $appname
+
+prepend-path    PATH        ${exec_prefix}
+#prepend-path    LD_LIBRARY_PATH  ${prefix}/lib

@@ -1,0 +1,24 @@
+#%Module1.0
+#####################################################################
+##
+## braker2 Modulefile
+## by Zhigui Bao
+## 12-01-2020
+##
+##
+
+# for Tcl script use only
+set     appname                braker
+set     version                2.1.5
+set     prefix                 /work/home/zhangzhiyang/miniconda3/envs/${appname}
+set     exec_prefix            ${prefix}/bin
+setenv  AUGUSTUS_BIN_PATH      /work/home/zhangzhiyang/miniconda3/envs/braker/bin/
+setenv     AUGUSTUS_CONFIG_PATH   /work/home/zhangzhiyang/miniconda3/envs/braker/config/
+setenv     AUGUSTUS_SCRIPTS_PATH  /work/home/zhangzhiyang/miniconda3/envs/braker/bin/
+
+
+conflict $appname
+
+prepend-path    PATH        ${exec_prefix}
+prepend-path    PERL5LIB    /work/home/zhangzhiyang/miniconda3/envs/braker3/lib/perl5/vendor_perl
+#prepend-path    PERL5LIB    ${prefix}/lib/site_perl/5.26.2/x86_64-linux-thread-multi:${prefix}/lib/site_perl/5.26.2:${prefix}/lib/5.26.2/x86_64-linux-thread-multi:${prefix}/lib/5.26.2

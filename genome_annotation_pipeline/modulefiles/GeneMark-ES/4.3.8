@@ -1,0 +1,20 @@
+#%Module1.0
+#####################################################################
+##
+## EDTA Modulefile
+## by Zhigui Bao
+## 12-01-2020
+##
+##
+
+# for Tcl script use only
+set     appname         GeneMark-ES
+set     version         4.3.8
+set     prefix          /work/home/zhangzhiyang/software/GeneMark-ES/gmes_linux_64_4
+set     exec_prefix     ${prefix}
+
+
+
+conflict $appname
+
+prepend-path    PATH        ${exec_prefix}
