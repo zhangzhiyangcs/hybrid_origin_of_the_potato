@@ -1,0 +1,53 @@
+
+## restore the default channels
+conda config --remove-key channels
+conda config --append channels defaults
+
+## mamba construct the environment
+asm_environment.yml  braker_environment.yml  maker_environment.yml  mapping_environment.yml  mikado_environment.yml  snakemake_environment.yml
+mamba  env create -f asm_environment.yml
+......
+
+## install the GeneMark-ES software
+the .gm_key only have 400 days and forget to substitute the following file:
+rule/02.braker.smk:        cp ctl/.gm_key ~/
+
+## install the perl 
+wget https://www.cpan.org/src/5.0/perl-5.26.1.tar.gz
+tar -zxvf perl-5.26.1.tar.gz
+./Configure -des -Dprefix=/fwork1/hanm/work/test/perl -Dusethreads -Uversiononly
+## If you encounter the problem of envrionment
+unset C_INCLUDE_PATH 
+make
+make install
+
+## install SNAP software
+git clone https://github.com/KorfLab/SNAP.git
+make
+
+## change the corresponding path of ctl file in round1 and round2 directory 
+maker_exe.ctl:makeblastdb=/work/home/zhangzhiyang/miniconda3/envs/maker/bin/makeblastdb #location of NCBI+ makeblastdb executable
+maker_exe.ctl:blastn=/work/home/zhangzhiyang/miniconda3/envs/maker/bin/blastn #location of NCBI+ blastn executable
+maker_exe.ctl:blastx=/work/home/zhangzhiyang/miniconda3/envs/maker/bin/blastx #location of NCBI+ blastx executable
+maker_exe.ctl:tblastx=/work/home/zhangzhiyang/miniconda3/envs/maker/bin/tblastx #location of NCBI+ tblastx executable
+maker_exe.ctl:RepeatMasker=/work/home/zhangzhiyang/miniconda3/envs/maker/bin/RepeatMasker #location of RepeatMasker executable
+maker_exe.ctl:exonerate=/work/home/zhangzhiyang/miniconda3/envs/maker/bin/exonerate #location of exonerate executable
+maker_exe.ctl:snap=/work/home/zhangzhiyang/miniconda3/envs/maker/bin/snap #location of snap executable
+maker_exe.ctl:augustus=/work/home/zhangzhiyang/miniconda3/envs/maker/bin/augustus #location of augustus executable
+maker_exe.ctl:tRNAscan-SE=/work/home/zhangzhiyang/miniconda3/envs/maker/bin/tRNAscan-SE #location of trnascan executable
+
+## prepare the non-redundant proteins files for the homologous annotation
+#!/bin/bash
+cd-hit -c 1  -aS 1  -i repre_wild_potato.pep.fa  -o cd-hit_potato.pep.fa -T 0 -M 10000
+
+# configure the corresponding files in modulefiles
+asm  braker2  braker3  EDTA  GeneMark-ES  maker  mapping  miniprot  perl  QC  snakemake  SNAP  
+
+## if you want rerun the braker, you should remove the following the files
+rm -rf ./config/species/braker_DM
+rm -rf /work/home/zhangzhiyang/miniconda3/envs/braker3/config//species/braker_DM
+
+# run pipeline
+sed -i "s|^outdir:|outdir: \"`pwd`\"|g" config.yaml
+snakemake -npr -s Snakefile
+snakemake -k  -s Snakefile --latency-wait 100  -j 38  --stats snakejob.stats >&2 2>> snakejob.log
